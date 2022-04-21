@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Telefone {
 
-    private int id;
+    private Long id;
     private String ddd;
     private String numero;
     private String referencia;

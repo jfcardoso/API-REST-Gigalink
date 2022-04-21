@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Email {
 
-    private int id;
+    private Long id;
     private String email;
     private String referencia;
 }

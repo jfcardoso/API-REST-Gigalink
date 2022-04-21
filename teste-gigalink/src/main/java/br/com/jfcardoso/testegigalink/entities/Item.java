@@ -3,10 +3,12 @@ package br.com.jfcardoso.testegigalink.entities;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class Item {
-    private int id;
+    private Long id;
     private double quantidade;
-    private double valor;
+    private BigDecimal valor;
 }

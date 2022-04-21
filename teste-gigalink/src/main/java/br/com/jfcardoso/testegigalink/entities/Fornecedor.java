@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class Fornecedor {
 
-    private int id;
+    private Long id;
     private String nome;
     private String descricao;
     private String cidade;

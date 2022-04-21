@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class Transportadora {
 
-    private int id;
+    private Long id;
     private String nome;
 }
