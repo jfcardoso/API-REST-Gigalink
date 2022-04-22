@@ -3,10 +3,7 @@ package br.com.jfcardoso.testegigalink.entities;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -19,4 +16,7 @@ public class Telefone {
     private String ddd;
     private String numero;
     private String referencia;
+    @ManyToOne
+    @JoinColumn(name = "fornecedor_id")
+    Fornecedor fornecedor;
 }

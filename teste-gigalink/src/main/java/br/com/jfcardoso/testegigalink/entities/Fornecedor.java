@@ -3,10 +3,7 @@ package br.com.jfcardoso.testegigalink.entities;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -21,5 +18,12 @@ public class Fornecedor {
     private String cidade;
     private String endereco;
     private String bairro;
-    private int numero;
+    private Integer numero;
+    @OneToMany
+    @JoinColumn(name = "email_id")
+    Email emails;
+    @OneToMany
+    @JoinColumn(name = "telefone_id")
+    Telefone telefones;
+
 }
