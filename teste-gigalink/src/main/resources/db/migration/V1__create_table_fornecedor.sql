@@ -5,6 +5,6 @@ CREATE TABLE public.fornecedor (
 	cidade varchar(100) not null,
 	endereco varchar(200) not null,
 	bairro varchar(100) not null,
-	numero integer not null
+	numero integer not null,
 	primary key (id)
 );

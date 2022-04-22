@@ -20,11 +20,9 @@ public class Fornecedor {
     private String endereco;
     private String bairro;
     private Integer numero;
-    @OneToMany
-    @JoinColumn(name = "email_id")
+    @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL)
     List<Email> emails;
-    @OneToMany
-    @JoinColumn(name = "telefone_id")
+    @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL)
     List<Telefone> telefones;
 
 }

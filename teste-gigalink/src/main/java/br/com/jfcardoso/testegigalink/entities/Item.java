@@ -16,11 +16,9 @@ public class Item {
     private Long id;
     private Double quantidade;
     private BigDecimal valor;
-    @ManyToOne
-    @JoinColumn(name = "pedido_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     Pedido pedido;
-    @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     Produto produto;
 
 }

@@ -15,8 +15,7 @@ public class Email {
     private Long id;
     private String email;
     private String referencia;
-    @ManyToOne
-    @JoinColumn(name = "fornecedor_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     Fornecedor fornecedor;
 
 }

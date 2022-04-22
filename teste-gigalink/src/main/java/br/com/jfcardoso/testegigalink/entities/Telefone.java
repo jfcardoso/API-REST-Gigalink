@@ -16,7 +16,6 @@ public class Telefone {
     private String ddd;
     private String numero;
     private String referencia;
-    @ManyToOne
-    @JoinColumn(name = "fornecedor_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     Fornecedor fornecedor;
 }
