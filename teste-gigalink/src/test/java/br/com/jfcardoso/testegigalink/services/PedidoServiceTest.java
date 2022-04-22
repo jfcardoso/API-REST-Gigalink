@@ -1,7 +1,6 @@
 package br.com.jfcardoso.testegigalink.services;
 
 import br.com.jfcardoso.testegigalink.entities.Pedido;
-import br.com.jfcardoso.testegigalink.entities.Transportadora;
 import br.com.jfcardoso.testegigalink.repositories.PedidoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
