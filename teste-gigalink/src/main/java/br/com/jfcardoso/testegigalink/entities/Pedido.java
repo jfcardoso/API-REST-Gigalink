@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +24,6 @@ public class Pedido {
     Transportadora transportadora;
     @OneToMany
     @JoinColumn(name = "item_id")
-    Item itens;
+    List<Item> itens;
 
 }

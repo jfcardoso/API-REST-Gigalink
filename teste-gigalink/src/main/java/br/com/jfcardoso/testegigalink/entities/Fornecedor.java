@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,9 +22,9 @@ public class Fornecedor {
     private Integer numero;
     @OneToMany
     @JoinColumn(name = "email_id")
-    Email emails;
+    List<Email> emails;
     @OneToMany
     @JoinColumn(name = "telefone_id")
-    Telefone telefones;
+    List<Telefone> telefones;
 
 }
