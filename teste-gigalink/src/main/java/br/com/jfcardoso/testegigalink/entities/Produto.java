@@ -3,10 +3,7 @@ package br.com.jfcardoso.testegigalink.entities;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Builder
@@ -18,4 +15,7 @@ public class Produto {
     private Long id;
     private String nome;
     private String descricao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    Fornecedor fornecedor;
+
 }
