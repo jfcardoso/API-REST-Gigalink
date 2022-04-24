@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,11 +47,11 @@ public class TransportadoraServiceTest {
         Transportadora transportadora = buildTransportadora("test");
         transportadora.setId(102030L);
 
-        when(transportadoraRepository.getById(transportadora.getId())).thenReturn(transportadora);
+        when(transportadoraRepository.findById(anyLong())).thenReturn(Optional.of(transportadora));
 
         Transportadora response = transportadoraService.getById(transportadora.getId());
 
-        verify(transportadoraRepository, times(1)).getById(transportadora.getId());
+        verify(transportadoraRepository, times(1)).findById(transportadora.getId());
 
         assertEquals(transportadora, response);
     }
