@@ -1,7 +1,5 @@
 package br.com.jfcardoso.testegigalink.services;
 
-import br.com.jfcardoso.testegigalink.controllers.TransportadoraRequestDTO;
-import br.com.jfcardoso.testegigalink.entities.Produto;
 import br.com.jfcardoso.testegigalink.entities.Transportadora;
 import br.com.jfcardoso.testegigalink.repositories.TransportadoraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +28,6 @@ public class TransportadoraService {
 
     public Transportadora save(Transportadora transportadora) {
         return transportadoraRepository.save(transportadora);
-    }
-
-    public Transportadora create (TransportadoraRequestDTO transportadoraDTO){
-        return this.save(Transportadora.builder().nome(transportadoraDTO.getNome()).build());
-    }
-
-    public Transportadora update (Long id, TransportadoraRequestDTO transportadoraDTO){
-        Transportadora transportadoraSalva = this.getById(id);
-        transportadoraSalva.setNome(transportadoraDTO.getNome());
-        return this.save(transportadoraSalva);
     }
 
     public void delete(Long id) {

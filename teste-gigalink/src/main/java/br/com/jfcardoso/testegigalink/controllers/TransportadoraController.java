@@ -25,13 +25,14 @@ public class TransportadoraController {
     }
 
     @PostMapping
-    public Transportadora createTransportadora(@RequestBody TransportadoraRequestDTO transportadoraDTO) {
-        return transportadoraService.create(transportadoraDTO);
+    public Transportadora createTransportadora(@RequestBody Transportadora transportadora) {
+        return transportadoraService.save(transportadora);
     }
 
     @PutMapping("/{id}")
-    public Transportadora updateTransportadora(@PathVariable Long id, @RequestBody TransportadoraRequestDTO transportadoraDTO) {
-        return transportadoraService.update(id, transportadoraDTO);
+    public Transportadora updateTransportadora(@PathVariable Long id, @RequestBody Transportadora transportadora) {
+        transportadora.setId(id);
+        return transportadoraService.save(transportadora);
     }
 
     @DeleteMapping("/{id}")
