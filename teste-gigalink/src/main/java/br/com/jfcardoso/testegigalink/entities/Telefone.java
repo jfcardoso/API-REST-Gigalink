@@ -1,12 +1,19 @@
 package br.com.jfcardoso.testegigalink.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Telefone {
 
@@ -17,5 +24,7 @@ public class Telefone {
     private String numero;
     private String referencia;
     @ManyToOne(fetch = FetchType.LAZY)
-    Fornecedor fornecedor;
+    @JsonIgnore
+    @JoinColumn(name = "fornecedor_id")
+    private Fornecedor fornecedor;
 }
