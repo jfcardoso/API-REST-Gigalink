@@ -6,19 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
 
-   @Autowired
-   ProdutoRepository produtoRepository;
+    @Autowired
+    ProdutoRepository produtoRepository;
 
     public List<Produto> getAll() {
         return produtoRepository.findAll();
     }
 
     public Produto getById(Long id) {
-        return produtoRepository.getById(id);
+        Optional<Produto> produtoOpt = produtoRepository.findById(id);
+        if (produtoOpt.isEmpty()){
+            throw new RuntimeException("Produto não encontrado");
+        }
+        return produtoOpt.get();
     }
 
     public Produto save(Produto produto) {
@@ -29,3 +34,4 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 }
+
