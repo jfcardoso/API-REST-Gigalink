@@ -1,6 +1,8 @@
 package br.com.jfcardoso.testegigalink.services;
 
 import br.com.jfcardoso.testegigalink.entities.Fornecedor;
+import br.com.jfcardoso.testegigalink.entities.Item;
+import br.com.jfcardoso.testegigalink.entities.Telefone;
 import br.com.jfcardoso.testegigalink.repositories.FornecedorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,8 +11,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,11 +50,11 @@ public class FornecedorServiceTest {
         Fornecedor fornecedor = buildFornecedor("test");
         fornecedor.setId(102030L);
 
-        when(fornecedorRepository.getById(fornecedor.getId())).thenReturn(fornecedor);
+        when(fornecedorRepository.findById(anyLong())).thenReturn(Optional.of(fornecedor));
 
         Fornecedor response = fornecedorService.getById(fornecedor.getId());
 
-        verify(fornecedorRepository, times(1)).getById(fornecedor.getId());
+        verify(fornecedorRepository, times(1)).findById(fornecedor.getId());
 
         assertEquals(fornecedor, response);
     }
@@ -60,20 +64,24 @@ public class FornecedorServiceTest {
         Fornecedor fornecedor = buildFornecedor("test");
         fornecedor.setId(102030L);
 
-        when(fornecedorRepository.getById(fornecedor.getId())).thenThrow(new EntityNotFoundException("Fake Error"));
+        when(fornecedorRepository.getById(fornecedor.getId()))
+                .thenThrow(new RuntimeException("Fornecedor não cadastrado"));
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             fornecedorService.getById(fornecedor.getId());
         });
 
-        verify(fornecedorRepository, times(1)).getById(fornecedor.getId());
-        assertEquals("Fake Error", exception.getMessage());
+        verify(fornecedorRepository, times(1)).findById(fornecedor.getId());
+        assertEquals("Fornecedor não cadastrado", exception.getMessage());
     }
 
     @Test
     public void test_save() {
         Fornecedor fornecedorNovo = buildFornecedor("test new");
         Fornecedor fornecedorSalvo = buildFornecedor("test saved");
+
+        List<Telefone> telefones = buildTelefone("22", "2522-0000", "Principal");
+        fornecedorNovo.setTelefones(telefones);
 
         when(fornecedorRepository.save(fornecedorNovo)).thenReturn(fornecedorSalvo);
 
@@ -95,6 +103,17 @@ public class FornecedorServiceTest {
     }
 
     private Fornecedor buildFornecedor(String nome) {
-        return Fornecedor.builder().nome(nome).nome("unit test").build();
+        return Fornecedor.builder()
+                .nome(nome)
+                .nome("unit test")
+                .build();
+    }
+
+    private List<Telefone> buildTelefone(String ddd, String numero, String referencia) {
+        return Collections.singletonList(Telefone.builder()
+                .ddd(ddd)
+                .numero(numero)
+                .referencia(referencia)
+                .build());
     }
 }
