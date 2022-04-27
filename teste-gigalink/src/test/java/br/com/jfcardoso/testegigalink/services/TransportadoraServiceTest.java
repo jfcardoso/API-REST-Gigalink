@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -61,14 +60,15 @@ public class TransportadoraServiceTest {
         Transportadora transportadora = buildTransportadora("test");
         transportadora.setId(102030L);
 
-        when(transportadoraRepository.getById(transportadora.getId())).thenThrow(new EntityNotFoundException("Fake Error"));
+        when(transportadoraRepository.getById(transportadora.getId()))
+                .thenThrow(new RuntimeException("Transportadora não cadastrada"));
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             transportadoraService.getById(transportadora.getId());
         });
 
-        verify(transportadoraRepository, times(1)).getById(transportadora.getId());
-        assertEquals("Fake Error", exception.getMessage());
+        verify(transportadoraRepository, times(1)).findById(transportadora.getId());
+        assertEquals("Transportadora não cadastrada", exception.getMessage());
     }
 
     @Test
