@@ -1,5 +1,6 @@
 package br.com.jfcardoso.testegigalink.services;
 
+import br.com.jfcardoso.testegigalink.entities.Item;
 import br.com.jfcardoso.testegigalink.entities.Pedido;
 import br.com.jfcardoso.testegigalink.repositories.PedidoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,9 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,11 +48,11 @@ public class PedidoServiceTest {
         Pedido pedido = buildPedido("test");
         pedido.setId(102030L);
 
-        when(pedidoRepository.getById(pedido.getId())).thenReturn(pedido);
+        when(pedidoRepository.findById(anyLong())).thenReturn(Optional.of(pedido));
 
         Pedido response = pedidoService.getById(pedido.getId());
 
-        verify(pedidoRepository, times(1)).getById(pedido.getId());
+        verify(pedidoRepository, times(1)).findById(pedido.getId());
 
         assertEquals(pedido, response);
     }
@@ -60,20 +62,23 @@ public class PedidoServiceTest {
         Pedido pedido = buildPedido("test");
         pedido.setId(102030L);
 
-        when(pedidoRepository.getById(pedido.getId())).thenThrow(new EntityNotFoundException("Fake Error"));
+        when(pedidoRepository.getById(pedido.getId())).thenThrow(new RuntimeException("Pedido não cadastrado"));
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             pedidoService.getById(pedido.getId());
         });
 
-        verify(pedidoRepository, times(1)).getById(pedido.getId());
-        assertEquals("Fake Error", exception.getMessage());
+        verify(pedidoRepository, times(1)).findById(pedido.getId());
+        assertEquals("Pedido não cadastrado", exception.getMessage());
     }
 
     @Test
     public void test_save() {
         Pedido pedidoNovo = buildPedido("test new");
         Pedido pedidoSalvo = buildPedido("test saved");
+
+        List<Item> items = buildItem(10.0, new BigDecimal(2.45));
+        pedidoNovo.setItens(items);
 
         when(pedidoRepository.save(pedidoNovo)).thenReturn(pedidoSalvo);
 
@@ -95,6 +100,16 @@ public class PedidoServiceTest {
     }
 
     private Pedido buildPedido(String nota) {
-        return Pedido.builder().notaFiscal(nota).notaFiscal("unit test").build();
+        return Pedido.builder()
+                .notaFiscal(nota)
+                .notaFiscal("unit test")
+                .build();
+    }
+
+    private List<Item> buildItem(double quantidade, BigDecimal valor) {
+       return Collections.singletonList(Item.builder()
+               .quantidade(quantidade)
+               .valor(valor)
+               .build());
     }
 }
