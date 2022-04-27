@@ -8,9 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,11 +45,11 @@ public class ProdutoServiceTest {
        Produto produto = buildProduto("test");
        produto.setId(102030L);
 
-        when(produtoRepository.getById(produto.getId())).thenReturn(produto);
+        when(produtoRepository.findById(anyLong())).thenReturn(Optional.of(produto));
 
         Produto response = produtoService.getById(produto.getId());
 
-        verify(produtoRepository, times(1)).getById(produto.getId());
+        verify(produtoRepository, times(1)).findById(produto.getId());
 
         assertEquals(produto, response);
     }
@@ -59,14 +59,15 @@ public class ProdutoServiceTest {
         Produto produto = buildProduto("test");
         produto.setId(102030L);
 
-        when(produtoRepository.getById(produto.getId())).thenThrow(new EntityNotFoundException("Fake Error"));
+        when(produtoRepository.getById(produto.getId()))
+                .thenThrow(new RuntimeException("Produto não encontrado"));
 
-        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             produtoService.getById(produto.getId());
         });
 
-        verify(produtoRepository, times(1)).getById(produto.getId());
-        assertEquals("Fake Error", exception.getMessage());
+        verify(produtoRepository, times(1)).findById(produto.getId());
+        assertEquals("Produto não encontrado", exception.getMessage());
     }
 
     @Test
