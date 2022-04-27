@@ -27,7 +27,6 @@ public class Produto {
     private String nome;
     private String descricao;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     Fornecedor fornecedor;
 
 }
