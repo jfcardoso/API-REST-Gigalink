@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +78,7 @@ public class PedidoServiceTest {
         Pedido pedidoNovo = buildPedido("test new");
         Pedido pedidoSalvo = buildPedido("test saved");
 
-        List<Item> items = buildItem(10.0, new BigDecimal(2.45));
+        List<Item> items = buildItem(10.0, new BigDecimal(2.45).setScale(2, RoundingMode.HALF_EVEN));
         pedidoNovo.setItens(items);
 
         when(pedidoRepository.save(pedidoNovo)).thenReturn(pedidoSalvo);
@@ -102,14 +103,16 @@ public class PedidoServiceTest {
     private Pedido buildPedido(String nota) {
         return Pedido.builder()
                 .notaFiscal(nota)
-                .notaFiscal("unit test")
+                .valorTotal(new BigDecimal(26).setScale(2, RoundingMode.HALF_EVEN))
+                .desconto(new BigDecimal(2).setScale(2, RoundingMode.HALF_EVEN))
+                .valorFrete(new BigDecimal(3.5).setScale(2, RoundingMode.HALF_EVEN))
                 .build();
     }
 
     private List<Item> buildItem(double quantidade, BigDecimal valor) {
-       return Collections.singletonList(Item.builder()
-               .quantidade(quantidade)
-               .valor(valor)
-               .build());
+        return Collections.singletonList(Item.builder()
+                .quantidade(quantidade)
+                .valor(valor)
+                .build());
     }
 }
